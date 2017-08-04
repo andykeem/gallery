@@ -1,5 +1,6 @@
 package com.example.foo.galleryapp.helper;
 
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
@@ -17,7 +18,10 @@ import java.net.URL;
 
 public class GalleryFetchr {
 
+    // https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=your_key&per_page=10&format=json&nojsoncallback=1
     protected static final String TAG = "GalleryFetchr";
+    protected static final String ENDPOINT = "https://api.flickr.com/services/rest/";
+    protected static final String API_KEY = "2720839ea1270631cf82867ae309ef70";
 
     public String getUrlContents(String url) {
         String resp = null;
@@ -59,5 +63,17 @@ public class GalleryFetchr {
             }
         }
         return null;
+    }
+
+    public String fetchPhotos() {
+        Uri uri = Uri.parse(ENDPOINT)
+                .buildUpon()
+                .appendQueryParameter("api_key", API_KEY)
+                .appendQueryParameter("method", "flickr.photos.getRecent")
+                .build();
+        String url = uri.toString();
+        String resp = getUrlContents(url);
+        Log.d(TAG, "resp: " + resp);
+        return resp;
     }
 }
